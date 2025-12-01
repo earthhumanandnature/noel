@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Quả Cầu Tuyết Giáng Sinh 2025 – Hoàn hảo 100%</title>
+  <title>Quả Cầu Tuyết Giáng Sinh 2025 – Hoàn hảo tuyệt đối</title>
   <style>
     body { margin:0; overflow:hidden; background:#000; touch-action:none; }
     #info { position:absolute; top:20px; left:50%; transform:translateX(-50%); color:#fff; background:rgba(0,0,0,0.7); padding:12px 40px; border-radius:40px; font-size:18px; pointer-events:none; z-index:100; }
@@ -77,16 +77,15 @@
     const inside = new THREE.Group(); globe.add(inside);
 
     // Đất tuyết
-    inside.add(new THREE.Mesh(new THREE.CircleGeometry(114,64), new THREE.MeshStandardMaterial({color:0xf8faff})).rotation.set(-Math.PI/2,0,0).position.set(0,-80,0));
+    const ground = new THREE.Mesh(new THREE.CircleGeometry(114,64), new THREE.MeshStandardMaterial({color:0xf8faff}));
+    ground.rotation.x = -Math.PI/2; ground.position.y = -80; inside.add(ground);
 
     // Nhà gỗ
     const house = new THREE.Group();
     house.add(new THREE.Mesh(new THREE.BoxGeometry(54,50,54), new THREE.MeshStandardMaterial({color:0x8b4513})));
     const roof = new THREE.Mesh(new THREE.ConeGeometry(66,44,4), new THREE.MeshStandardMaterial({color:0xb22222}));
-    roof.position.y = 47; roof.rotation.y = Math.PI/4;
-    house.add(roof);
-    house.position.set(-20,-55,-15);
-    inside.add(house);
+    roof.position.y = 47; roof.rotation.y = Math.PI/4; house.add(roof);
+    house.position.set(-20,-55,-15); inside.add(house);
 
     // Người tuyết
     const snowman = new THREE.Group();
@@ -95,55 +94,48 @@
     const head = new THREE.Mesh(new THREE.SphereGeometry(10), new THREE.MeshStandardMaterial({color:0xffffff})); head.position.y=43; snowman.add(head);
     const hat = new THREE.Mesh(new THREE.CylinderGeometry(9,11,22), new THREE.MeshStandardMaterial({color:0x000})); hat.position.y=52; snowman.add(hat);
     const scarf = new THREE.Mesh(new THREE.BoxGeometry(26,6,14), new THREE.MeshStandardMaterial({color:0xff0000})); scarf.position.set(0,34,11); snowman.add(scarf);
-    snowman.position.set(40,-62,10);
-    inside.add(snowman);
+    snowman.position.set(40,-62,10); inside.add(snowman);
 
-    // 4 cây thông – ĐÃ SỬA TRIỆT ĐỂ LỖI Vector3
+    // 4 cây thông – ĐÃ SỬA HOÀN TOÀN LỖI .setScalar
     for(let i=0; i<4; i++){
       const tree = new THREE.Group();
 
-      const trunk = new THREE.Mesh(
-        new THREE.CylinderGeometry(5,7,24),
-        new THREE.MeshStandardMaterial({color:0x654321})
-      );
-
-      const leaves = new THREE.Mesh(
-        new THREE.ConeGeometry(30,60,12),
-        new THREE.MeshStandardMaterial({color:0x0f5132})
-      );
+      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(5,7,24), new THREE.MeshStandardMaterial({color:0x654321}));
+      const leaves = new THREE.Mesh(new THREE.ConeGeometry(30,60,12), new THREE.MeshStandardMaterial({color:0x0f5132}));
       leaves.position.y = 42;
 
       tree.add(trunk);
       tree.add(leaves);
 
       tree.position.set(-70 + i*50, -64, -40 - Math.random()*30);
-      tree.scale.setScalar(0.6 + Math.random()*0.5);
+      const scale = 0.6 + Math.random()*0.5;
+      tree.scale.set(scale, scale, scale);  // ← DÙNG .set() THAY .setScalar()
       tree.rotation.y = Math.random() * Math.PI;
 
-      inside.add(tree); // ← CHỈ ADD TREE (là Group) → KHÔNG BAO GIỜ LỖI
+      inside.add(tree);
     }
 
     // Tuyết rơi
-    const snow = new THREE.Points(
-      new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(21000),3)),
+    const snowCount = 7000;
+    const posArray = new Float32Array(snowCount * 3);
+    for(let i = 0; i < snowCount * 3; i += 3){
+      posArray[i]   = THREE.MathUtils.randFloatSpread(250);
+      posArray[i+1] = 200 + Math.random()*100;
+      posArray[i+2] = THREE.MathUtils.randFloatSpread(250);
+    }
+    const snow = new THREE.Point postura(
+      new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(posArray, 3)),
       new THREE.PointsMaterial({color:0xffffff, size:5.5, transparent:true, opacity:0.92, blending:THREE.AdditiveBlending})
     );
-    const pos = snow.geometry.attributes.position.array;
-    for(let i=0; i<pos.length; i+=3){
-      pos[i]   = THREE.MathUtils.randFloatSpread(250);
-      pos[i+1] = 200 + Math.random()*100;
-      pos[i+2] = THREE.MathUtils.randFloatSpread(250);
-    }
     globe.add(snow);
 
     scene.add(new THREE.AmbientLight(0xffffff,0.8));
     scene.add(new THREE.DirectionalLight(0xffffff,1.5).position.set(120,250,100));
 
     // ==================== HIỆU ỨNG ====================
-    let clickCount=0, spinSpeed=0, shake=0, isExploded=false, giftClicks=0;
+    let clickCount = 0, spinSpeed = 0, shake = 0, isExploded = false, giftClicks = 0;
     const countDisplay = document.getElementById('count');
     const fragments = [];
-
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
@@ -154,7 +146,7 @@
       mouse.x = (x/innerWidth)*2-1;
       mouse.y = -(y/innerHeight)*2+1;
       raycaster.setFromCamera(mouse,camera);
-      if(raycaster.intersectObject(glass).length>0){
+      if(raycaster.intersectObject(glass).length > 0){
         shake = 1;
         snow.material.size = 9;
         setTimeout(()=>snow.material.size=5.5,800);
@@ -185,21 +177,14 @@
       }
       globe.visible = false;
 
-      // Reset tuyết
+      const pos = snow.geometry.attributes.position.array;
       for(let i=1; i<pos.length; i+=3) pos[i] = 180 + Math.random()*150;
       snow.geometry.attributes.position.needsUpdate = true;
 
-      setTimeout(()=>{
-        document.getElementById('finalImage').style.display = 'flex';
-        new Audio('music.mp3').play().catch(()=>{});
-      },1800);
-
-      setTimeout(()=>{
-        document.getElementById('gift').style.transform = 'translateX(-50%) scale(1)';
-      },4000);
+      setTimeout(()=>{ document.getElementById('finalImage').style.display = 'flex'; new Audio('music.mp3').play().catch(()=>{}); },1800);
+      setTimeout(()=>{ document.getElementById('gift').style.transform = 'translateX(-50%) scale(1)'; },4000);
     }
 
-    // Hộp quà
     const giftBox = document.getElementById('gift');
     giftBox.addEventListener('click', ()=>{ if(giftClicks<3){ giftClicks++; giftBox.style.transform='translateX(-50%) scale(1.3)'; setTimeout(()=>giftBox.style.transform='translateX(-50%) scale(1)',200); if(giftClicks===3) setTimeout(openGift,800); }});
     giftBox.addEventListener('touchstart', e=>{e.preventDefault(); giftBox.click();});
@@ -214,9 +199,8 @@
       let z = 0;
       const fly = setInterval(()=>{
         santa.position.y += 11;
-        z -= 9;
-        santa.position.z = z;
-        santa.scale.multiplyScalar(1.045);
+        z -= 9; santa.position.z = z;
+        santa.scale.x *= 1.045; santa.scale.y *= 1.045;
         if(z < -160){
           clearInterval(fly);
           new Audio('music2.mp3').play().catch(()=>{});
@@ -225,10 +209,8 @@
       },30);
     }
 
-    // ANIMATE
     function animate(){
       requestAnimationFrame(animate);
-
       globe.rotation.y += 0.004 + spinSpeed;
 
       if(shake > 0.01){
@@ -237,6 +219,7 @@
         shake *= 0.93;
       }
 
+      const pos = snow.geometry.attributes.position.array;
       for(let i=1; i<pos.length; i+=3){
         pos[i] -= 0.9 + spinSpeed*7 + shake*5;
         if(pos[i] < -200) pos[i] += 500;
