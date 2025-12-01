@@ -16,22 +16,22 @@
 <body>
   <div id="info">Chạm hoặc lắc quả cầu tuyết nhé!</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/examples/js/controls/OrbitControls.js"></script>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
 
-  <script>
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0a1a3a);
 
-    const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 0, 350);
 
-    const renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.setPixelRatio(devicePixelRatio);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
 
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
     controls.enablePan = false;
@@ -72,7 +72,7 @@
     // Đế gỗ
     const base = new THREE.Mesh(
       new THREE.CylinderGeometry(80, 90, 60, 64),
-      new THREE.MeshStandardMaterial({color:0x8b4513})
+      new THREE.MeshStandardMaterial({ color: 0x8b4513 })
     );
     base.position.y = -150;
     globe.add(base);
@@ -80,9 +80,9 @@
     // Dải đỏ + nhãn Christmas (dùng canvas)
     const ribbon = new THREE.Mesh(
       new THREE.RingGeometry(80, 90, 64),
-      new THREE.MeshStandardMaterial({color:0xc41e3a, side: THREE.DoubleSide})
+      new THREE.MeshStandardMaterial({ color: 0xc41e3a, side: THREE.DoubleSide })
     );
-    ribbon.rotation.x = -Math.PI/2;
+    ribbon.rotation.x = -Math.PI / 2;
     ribbon.position.y = -125;
     globe.add(ribbon);
 
@@ -94,16 +94,16 @@
       const ctx = canvas.getContext('2d');
 
       // Nền vàng kim loại
-      const grad = ctx.createLinearGradient(0,0,512,128);
+      const grad = ctx.createLinearGradient(0, 0, 512, 128);
       grad.addColorStop(0, '#ffdd00');
       grad.addColorStop(1, '#b8860b');
       ctx.fillStyle = grad;
-      ctx.fillRect(0,0,512,128);
+      ctx.fillRect(0, 0, 512, 128);
 
       // Viền đen
       ctx.strokeStyle = '#333';
       ctx.lineWidth = 8;
-      ctx.strokeRect(4,4,504,120);
+      ctx.strokeRect(4, 4, 504, 120);
 
       // Chữ
       ctx.fillStyle = '#8b0000';
@@ -118,7 +118,7 @@
     const labelTexture = new THREE.CanvasTexture(createLabelCanvas());
     const label = new THREE.Mesh(
       new THREE.PlaneGeometry(90, 28),
-      new THREE.MeshBasicMaterial({map: labelTexture, transparent:true})
+      new THREE.MeshBasicMaterial({ map: labelTexture, transparent: true })
     );
     label.position.y = -125;
     label.position.z = 81;
@@ -131,47 +131,47 @@
     // Đất tuyết
     const ground = new THREE.Mesh(
       new THREE.CircleGeometry(110, 64),
-      new THREE.MeshStandardMaterial({color:0xf8f9fa})
+      new THREE.MeshStandardMaterial({ color: 0xf8f9fa })
     );
-    ground.rotation.x = -Math.PI/2;
+    ground.rotation.x = -Math.PI / 2;
     ground.position.y = -80;
     inside.add(ground);
 
     // Nhà gỗ nhỏ
     const house = new THREE.Group();
-    const walls = new THREE.Mesh(new THREE.BoxGeometry(50,45,50), new THREE.MeshStandardMaterial({color:0x8b4513}));
-    const roof = new THREE.Mesh(new THREE.ConeGeometry(60,40,4), new THREE.MeshStandardMaterial({color:0xb22222}));
+    const walls = new THREE.Mesh(new THREE.BoxGeometry(50, 45, 50), new THREE.MeshStandardMaterial({ color: 0x8b4513 }));
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(60, 40, 4), new THREE.MeshStandardMaterial({ color: 0xb22222 }));
     roof.position.y = 42;
-    roof.rotation.y = Math.PI/4;
+    roof.rotation.y = Math.PI / 4;
     house.add(walls, roof);
     house.position.set(-15, -58, -20);
     inside.add(house);
 
     // Người tuyết dễ thương
     const snowman = new THREE.Group();
-    const b1 = new THREE.Mesh(new THREE.SphereGeometry(16), new THREE.MeshStandardMaterial({color:0xffffff}));
-    const b2 = new THREE.Mesh(new THREE.SphereGeometry(12), new THREE.MeshStandardMaterial({color:0xffffff}));
+    const b1 = new THREE.Mesh(new THREE.SphereGeometry(16), new THREE.MeshStandardMaterial({ color: 0xffffff }));
+    const b2 = new THREE.Mesh(new THREE.SphereGeometry(12), new THREE.MeshStandardMaterial({ color: 0xffffff }));
     b2.position.y = 22;
-    const head = new THREE.Mesh(new THREE.SphereGeometry(9), new THREE.MeshStandardMaterial({color:0xffffff}));
+    const head = new THREE.Mesh(new THREE.SphereGeometry(9), new THREE.MeshStandardMaterial({ color: 0xffffff }));
     head.position.y = 38;
     // Mũ + khăn
-    const hat = new THREE.Mesh(new THREE.CylinderGeometry(7,9,18), new THREE.MeshStandardMaterial({color:0x000000}));
+    const hat = new THREE.Mesh(new THREE.CylinderGeometry(7, 9, 18), new THREE.MeshStandardMaterial({ color: 0x000000 }));
     hat.position.y = 46;
-    const scarf = new THREE.Mesh(new THREE.BoxGeometry(20,4,10), new THREE.MeshStandardMaterial({color:0xff0000}));
-    scarf.position.set(0,30,9);
-    snowman.add(b1,b2,head,hat,scarf);
+    const scarf = new THREE.Mesh(new THREE.BoxGeometry(20, 4, 10), new THREE.MeshStandardMaterial({ color: 0xff0000 }));
+    scarf.position.set(0, 30, 9);
+    snowman.add(b1, b2, head, hat, scarf);
     snowman.position.set(35, -64, 5);
     inside.add(snowman);
 
     // 3 cây thông ngẫu nhiên
-    for(let i=0; i<4; i++){
+    for (let i = 0; i < 4; i++) {
       const tree = new THREE.Group();
-      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(4,6,20), new THREE.MeshStandardMaterial({color:0x654321}));
-      const leaves = new THREE.Mesh(new THREE.ConeGeometry(25,50,8), new THREE.MeshStandardMaterial({color:0x0f5132}));
+      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(4, 6, 20), new THREE.MeshStandardMaterial({ color: 0x654321 }));
+      const leaves = new THREE.Mesh(new THREE.ConeGeometry(25, 50, 8), new THREE.MeshStandardMaterial({ color: 0x0f5132 }));
       leaves.position.y = 35;
       tree.add(trunk, leaves);
-      tree.position.set(-60 + i*40, -65, -30 -Math.random()*30);
-      tree.scale.setScalar(0.6 + Math.random()*0.5);
+      tree.position.set(-60 + i * 40, -65, -30 - Math.random() * 30);
+      tree.scale.setScalar(0.6 + Math.random() * 0.5);
       inside.add(tree);
     }
 
@@ -180,10 +180,10 @@
     const snowGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(snowCount * 3);
 
-    for(let i = 0; i < snowCount * 3; i += 3){
-      positions[i]   = THREE.MathUtils.randFloatSpread(240);
-      positions[i+1] = THREE.MathUtils.randFloatSpread(300) + 100;
-      positions[i+2] = THREE.MathUtils.randFloatSpread(240);
+    for (let i = 0; i < snowCount * 3; i += 3) {
+      positions[i] = THREE.MathUtils.randFloatSpread(240);
+      positions[i + 1] = THREE.MathUtils.randFloatSpread(300) + 100;
+      positions[i + 2] = THREE.MathUtils.randFloatSpread(240);
     }
     snowGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
@@ -207,10 +207,10 @@
 
     // ==================== LẮC QUẢ CẦU ====================
     let shake = 0;
-    function shakeGlobe(){
+    function shakeGlobe() {
       shake = 1;
       snow.material.size = 6;
-      setTimeout(()=> snow.material.size = 4, 1000);
+      setTimeout(() => (snow.material.size = 4), 1000);
     }
 
     // Click + Touch + Lắc điện thoại
@@ -218,9 +218,9 @@
     window.addEventListener('touchstart', shakeGlobe);
 
     if (window.DeviceMotionEvent) {
-      window.addEventListener('devicemotion', e => {
+      window.addEventListener('devicemotion', (e) => {
         const a = e.accelerationIncludingGravity;
-        if (a && (Math.abs(a.x) + Math.abs(a.y) + Math.abs(a.z) > 25)) {
+        if (a && Math.abs(a.x) + Math.abs(a.y) + Math.abs(a.z) > 25) {
           shakeGlobe();
         }
       });
@@ -234,7 +234,7 @@
       globe.rotation.y += 0.004;
 
       // Lắc khi được kích hoạt
-      if(shake > 0.01){
+      if (shake > 0.01) {
         globe.rotation.y += Math.sin(performance.now() * 0.03) * 0.04 * shake;
         globe.rotation.x += Math.sin(performance.now() * 0.02) * 0.03 * shake;
         shake *= 0.92;
@@ -242,9 +242,9 @@
 
       // Tuyết rơi
       const pos = snow.geometry.attributes.position.array;
-      for(let i = 1; i < pos.length; i += 3){
+      for (let i = 1; i < pos.length; i += 3) {
         pos[i] -= 0.6 + shake * 3;
-        if(pos[i] < -150) pos[i] += 400;
+        if (pos[i] < -150) pos[i] += 400;
       }
       snow.geometry.attributes.position.needsUpdate = true;
 
@@ -255,9 +255,9 @@
 
     // Resize
     window.addEventListener('resize', () => {
-      camera.aspect = innerWidth / innerHeight;
+      camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
+      renderer.setSize(window.innerWidth, window.innerHeight);
     });
   </script>
 </body>
