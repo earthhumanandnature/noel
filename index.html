@@ -1,188 +1,242 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <title>Quả Cầu Tuyết Giáng Sinh 3D - Siêu Đẹp 2025</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Quả Cầu Tuyết Christmas 2025</title>
   <style>
-    body { margin:0; overflow:hidden; background:#0b132b; }
-    .info {
-      position: absolute; top: 15px; left: 15px; color: #fff; background: rgba(0,0,0,0.6);
-      padding: 16px 24px; border-radius: 15px; font-size: 17px; pointer-events: none; z-index: 10;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-    }
+    body { margin:0; overflow:hidden; background:#0a1a3a; touch-action:none; }
+    #info { position:absolute; top:20px; left:50%; transform:translateX(-50%);
+            color:#fff; font-family:Arial; font-size:16px; background:rgba(0,0,0,0.5);
+            padding:10px 20px; border-radius:20px; pointer-events:none; z-index:10; }
   </style>
 </head>
 <body>
+  <div id="info">Chạm hoặc lắc nhẹ quả cầu tuyết nhé!</div>
 
-<div class="info">
-  Giữ chuột trái + kéo để xoay quả cầu<br>
-  <strong>Chúc bạn Giáng Sinh vui vẻ!</strong>
-</div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-<!-- Dùng r128 để chạy local 100% -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script>
+    // ---------- CƠ BẢN ----------
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a1a3a);
 
-<script>
-// ================== CƠ BẢN ==================
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0b132b);
+    const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 350);
 
-const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 1000);
-camera.position.set(0, 10, 35);
+    const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(devicePixelRatio);
+    document.body.appendChild(renderer.domElement);
 
-const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(innerWidth, innerHeight);
-renderer.setPixelRatio(devicePixelRatio);
-document.body.appendChild(renderer.domElement);
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.enableZoom = true;
+    controls.enablePan = false;
+    controls.minDistance = 200;
+    controls.maxDistance = 500;
 
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.08;
-controls.enablePan = false;
-controls.minDistance = 20;
-controls.maxDistance = 70;
+    // ---------- QUẢ CẦU KÍNH ----------
+    const globe = new THREE.Group();
+    scene.add(globe);
 
-// ================== ÁNH SÁNG MẠNH ==================
-scene.add(new THREE.AmbientLight(0xffffff, 1));
-const sun = new THREE.DirectionalLight(0xffffff, 2);
-sun.position.set(30, 60, 30);
-scene.add(sun);
-scene.add(new THREE.HemisphereLight(0xb3e5fc, 0x442255, 1.2));
+    // Kính trong suốt + phản chiếu
+    const glass = new THREE.Mesh(
+      new THREE.SphereGeometry(120, 64, 64),
+      new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 0.1,
+        roughness: 0,
+        transmission: 0.98,
+        thickness: 15,
+        clearcoat: 1,
+        clearcoatRoughness: 0,
+        transparent: true,
+        opacity: 0.95
+      })
+    );
+    globe.add(glass);
 
-// ================== NỀN TUYẾT RẤT THẤP ==================
-const ground = new THREE.Mesh(
-  new THREE.CircleGeometry(200, 64),
-  new THREE.MeshStandardMaterial({color:0xf0f5ff, roughness:0.95})
-);
-ground.rotation.x = -Math.PI/2;
-ground.position.y = -18;   // <-- hạ cực thấp để thấy toàn bộ giá đỡ
-scene.add(ground);
+    // Đế gỗ
+    const base = new THREE.Mesh(
+      new THREE.CylinderGeometry(80, 90, 60, 64),
+      new THREE.MeshStandardMaterial({color:0x8b4513})
+    );
+    base.position.y = -150;
+    globe.add(base);
 
-// ================== NHÀ + CÂY THÔNG NGOÀI TRỜI ==================
-function addHouse(x,z,rot=0) {
-  const h = new THREE.Group();
-  const body = new THREE.Mesh(new THREE.BoxGeometry(7,7,7), new THREE.MeshPhongMaterial({color:0xd63031}));
-  body.position.y = 3.5;
-  const roof = new THREE.Mesh(new THREE.ConeGeometry(9,5,4), new THREE.MeshPhongMaterial({color:0xffffff}));
-  roof.position.y = 10; roof.rotation.y = Math.PI/4;
-  h.add(body,roof);
-  h.position.set(x,-18,z);
-  h.rotation.y = rot;
-  h.scale.set(0.9,0.9,0.9);
-  scene.add(h);
-}
-addHouse(-30,-40); addHouse(35,-35,0.5); addHouse(-20,20); addHouse(28,15); addHouse(-38,5);
+    // Băng rôn đỏ + chữ Christmas
+    const ribbon = new THREE.Mesh(
+      new THREE.CylinderGeometry(85, 85, 15, 64, 1, false, 0, Math.PI*2),
+      new THREE.MeshStandardMaterial({color:0xc41e3a})
+    );
+    ribbon.position.y = -125;
+    globe.add(ribbon);
 
-function addBigTree(x,z) {
-  const t = new THREE.Group();
-  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(1.5,2,10), new THREE.MeshPhongMaterial({color:0x8B4513}));
-  trunk.position.y = 5;
-  t.add(trunk);
-  [5,4,3].forEach((s,i) => {
-    const cone = new THREE.Mesh(new THREE.ConeGeometry(s,10,12), new THREE.MeshPhongMaterial({color:0x0d6623}));
-    cone.position.y = 12 + i*8;
-    t.add(cone);
-    const snow = new THREE.Mesh(new THREE.ConeGeometry(s*0.9,1.5,12), new THREE.MeshPhongMaterial({color:0xffffff}));
-    snow.position.y = cone.position.y + 4;
-    t.add(snow);
-  });
-  t.position.set(x,-18,z);
-  scene.add(t);
-}
-addBigTree(-45,-50); addBigTree(50,-40); addBigTree(-40,30); addBigTree(45,25);
+    const label = new THREE.Mesh(
+      new THREE.PlaneGeometry(80, 25),
+      new THREE.MeshBasicMaterial({
+        map: new THREE.CanvasTexture(createLabel("Christmas")),
+        transparent: true
+      })
+    );
+    label.position.y = -125;
+    label.rotation.x = -Math.PI/2;
+    globe.add(label);
 
-// ================== NHÓM QUẢ CẦU ==================
-const globe = new THREE.Group();
-scene.add(globe);
+    function createLabel(text) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512; canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#d4af37';
+      ctx.fillRect(0,0,512,128);
+      ctx.fillStyle = '#8b4513';
+      ctx.roundRect(20,20,472,88,20).fill();
+      ctx.fillStyle = '#ffd700';
+      ctx.font = 'bold 56px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, 256, 64);
+      return canvas;
+    }
 
-// Kính trong suốt đẹp nhất cho r128
-const glass = new THREE.Mesh(
-  new THREE.SphereGeometry(10, 70, 70),
-  new THREE.MeshPhongMaterial({
-    color: 0xffffff,
-    transparent: true,
-    opacity: 0.22,
-    shininess: 120,
-    specular: 0xffffff,
-    reflectivity: 1,
-    side: THREE.DoubleSide
-  })
-);
-globe.add(glass);
+    // ---------- CẢNH BÊN TRONG ----------
+    const inside = new THREE.Group();
+    globe.add(inside);
 
-// Giá đỡ + chân đế vàng
-const gold = new THREE.MeshPhongMaterial({color:0xffd700, shininess:100, specular:0xffffff});
-const base = new THREE.Mesh(new THREE.CylinderGeometry(11,12,3,64), gold);
-base.position.y = -12;
-globe.add(base);
-const stand = new THREE.Mesh(new THREE.CylinderGeometry(5,6,6,64), gold);
-stand.position.y = -17;
-globe.add(stand);
+    // Đất tuyết
+    const ground = new THREE.Mesh(
+      new THREE.CircleGeometry(110, 64),
+      new THREE.MeshStandardMaterial({color:0xf0f8ff, roughness:0.8})
+    );
+    ground.rotation.x = -Math.PI/2;
+    ground.position.y = -80;
+    inside.add(ground);
 
-// ================== BÊN TRONG QUẢ CẦU ==================
-// Cây thông Noel thật
-let tree;
-new THREE.GLTFLoader().load(
-  'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/ChristmasTree/ChristmasTree.gltf',
-  g => { tree = g.scene; tree.scale.set(4.5,4.5,4.5); tree.position.y = -9; globe.add(tree); }
-);
+    // Nhà gỗ
+    const house = new THREE.Group();
+    const walls = new THREE.Mesh(new THREE.BoxGeometry(50,40,50), new THREE.MeshStandardMaterial({color:0x8b4513}));
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(60,40,4), new THREE.MeshStandardMaterial({color:0xdc143c}));
+    roof.position.y = 40;
+    roof.rotation.y = Math.PI/4;
+    house.add(walls, roof);
+    house.position.set(-20, -60, -20);
+    inside.add(house);
 
-// 15 hộp quà
-for(let i=0; i<15; i++){
-  const a = i/15*Math.PI*2;
-  const r = 2 + Math.random()*4;
-  const gift = new THREE.Group();
-  gift.add(new THREE.Mesh(new THREE.BoxGeometry(1.7,1.7,1.7),
-    new THREE.MeshPhongMaterial({color:Math.random()>0.5?0xff0033:0x00aa00})));
-  const rib = new THREE.Mesh(new THREE.BoxGeometry(1.9,0.25,0.25), new THREE.MeshPhongMaterial({color:0xffff66}));
-  rib.position.y=0.85;
-  gift.add(rib, rib.clone().rotateY(Math.PI/2));
-  gift.position.set(Math.cos(a)*r, -10.5, Math.sin(a)*r);
-  gift.rotation.y = Math.random()*Math.PI;
-  globe.add(gift);
-}
+    // Người tuyết
+    const snowman = new THREE.Group();
+    const body1 = new THREE.Mesh(new THREE.SphereGeometry(15,32,32), new THREE.MeshStandardMaterial({color:0xffffff}));
+    const body2 = new THREE.Mesh(new THREE.SphereGeometry(11,32,32), new THREE.MeshStandardMaterial({color:0xffffff}));
+    body2.position.y = 20;
+    const head = new THREE.Mesh(new THREE.SphereGeometry(8,32,32), new THREE.MeshStandardMaterial({color:0xffffff}));
+    head.position.y = 35;
+    const hat = new THREE.Mesh(new THREE.CylinderGeometry(6,8,15,32), new THREE.MeshStandardMaterial({color:0x111111}));
+    hat.position.y = 43;
+    snowman.add(body1,body2,head,hat);
+    snowman.position.set(30, -65, 10);
+    inside.add(snowman);
 
-// Tuyết rơi dày bên trong
-const snow = [];
-for(let i=0; i<800; i++){
-  const s = new THREE.Mesh(new THREE.SphereGeometry(0.09,6,6), new THREE.MeshBasicMaterial({color:0xffffff}));
-  s.position.set((Math.random()-0.5)*18, Math.random()*30-5, (Math.random()-0.5)*18);
-  globe.add(s);
-  snow.push(s);
-}
+    // Cây thông (3 cây)
+    for(let i=0;i<3;i++){
+      const tree = new THREE.Group();
+      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(5,8,25,16), new THREE.MeshStandardMaterial({color:0x8b4513}));
+      const leaves = new THREE.Mesh(new THREE.ConeGeometry(30,60,16), new THREE.MeshStandardMaterial({color:0x0f5132}));
+      leaves.position.y = 40;
+      tree.add(trunk,leaves);
+      tree.position.set(-40+40*i, -60, -40-Math.random()*20);
+      tree.scale.set(0.7+Math.random()*0.4,0.7+Math.random()*0.4,0.7+Math.random()*0.4);
+      inside.add(tree);
+    }
 
-// Tuyết rơi ngoài trời
-for(let i=0; i<600; i++){
-  const s = new THREE.Mesh(new THREE.SphereGeometry(0.1,6,6), new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.7}));
-  s.position.set((Math.random()-0.5)*500, Math.random()*120+20, (Math.random()-0.5)*500);
-  scene.add(s);
-  snow.push(s);
-}
+    // ---------- TUYẾT RƠI ----------
+    const snowParticles = [];
+    const snowGeo = new THREE.BufferGeometry();
+    const snowCount = 3000;
+    const posArray = new Float32Array(snowCount * 3);
 
-// ================== ANIMATION ==================
-function animate(){
-  requestAnimationFrame(animate);
-  controls.update();
+    for(let i=0; i<snowCount*3; i+=3){
+      posArray[i]   = THREE.MathUtils.randFloatSpread(300);
+      posArray[i+1] = THREE.MathUtils.randFloatSpread(200) + 100;
+      posArray[i+2] = THREE.MathUtils.randFloatSpread(300);
+    }
+    snowGeo.setAttribute('position', new THREE.BufferAttribute(posArray,3));
 
-  snow.forEach(p=>{
-    p.position.y -= 0.04 + Math.random()*0.04;
-    p.position.x += Math.sin(Date.now()*0.001 + p.position.z)*0.02;
-    if(p.position.y < -30) p.position.y = 50;
-  });
+    const snowMat = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 3,
+      transparent: true,
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending
+    });
 
-  if(tree) tree.rotation.y += 0.003;
+    const snow = new THREE.Points(snowGeo, snowMat);
+    globe.add(snow);
 
-  renderer.render(scene, camera);
-}
-animate();
+    // ---------- ÁNH SÁNG ----------
+    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambient);
+    const topLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    topLight.position.set(100,200,100);
+    scene.add(topLight);
 
-window.addEventListener('resize', ()=>{
-  camera.aspect = innerWidth/innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
-});
-</script>
+    // ---------- LẮC QUẢ CẦU ----------
+    let shakeIntensity = 0;
+    function shakeGlobe(){
+      shakeIntensity = 1;
+      // tăng tuyết rơi mạnh hơn khi lắc
+      snowMat.size = 5;
+      setTimeout(()=> snowMat.size = 3, 800);
+    }
+
+    // Chạm / click / lắc điện thoại
+    window.addEventListener('click', shakeGlobe);
+    window.addEventListener('touchstart', shakeGlobe);
+
+    // Lắc điện thoại (nếu dùng trên mobile)
+    if(window.DeviceMotionEvent){
+      window.addEventListener('devicemotion', (e)=>{
+        const acc = e.accelerationIncludingGravity;
+        if(Math.abs(acc.x)+Math.abs(acc.y)+Math.abs(acc.z) > 20){
+          shakeGlobe();
+        }
+      });
+    }
+
+    // ---------- ANIMATION ----------
+    function animate(){
+      requestAnimationFrame(animate);
+
+      // Quay nhẹ liên tục
+      globe.rotation.y += 0.003;
+
+      // Lắc khi được chạm
+      if(shakeIntensity > 0){
+        globe.rotation.y += Math.sin(performance.now()*0.02)*0.03*shakeIntensity;
+        globe.rotation.x += Math.sin(performance.now()*0.015)*0.02*shakeIntensity;
+        shakeIntensity *= 0.95;
+      }
+
+      // Tuyết rơi
+      const positions = snow.geometry.attributes.position.array;
+      for(let i=1; i<positions.length; i+=3){
+        positions[i] -= 0.5 + shakeIntensity*2;
+        if(positions[i] < -150) positions[i] = 200;
+      }
+      snow.geometry.attributes.position.needsUpdate = true;
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Resize
+    window.addEventListener('resize', ()=>{
+      camera.aspect = innerWidth/innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  </script>
 </body>
 </html>
