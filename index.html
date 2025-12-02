@@ -129,9 +129,10 @@
     );
     globe.add(snow);
 
-    const light = new THREE.DirectionalLight(0xffffff, 1.5);
-    light.position.set(120, 250, 100);
-    scene.add(light);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    dirLight.position.set(120, 250, 100);
+    scene.add(dirLight);
     
     // ==== HIỆU ỨNG ====
     let clickCount = 0, spinSpeed = 0, shake = 0, isExploded = false, giftClicks = 0;
