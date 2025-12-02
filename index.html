@@ -8,8 +8,8 @@
     body { margin:0; overflow:hidden; background:#000; touch-action:none; }
     #info { position:absolute; top:20px; left:50%; transform:translateX(-50%); color:#fff; background:rgba(0,0,0,0.7); padding:12px 40px; border-radius:40px; font-size:18px; pointer-events:none; z-index:100; }
     #finalImage { position:fixed; inset:0; background:#000; display:none; align-items:center; justify-content:center; z-index:998; }
-    #finalImage img { width:100vw; height:100vh; object-fit:contain; } /* ĐÃ SỬA FULL MÀN HÌNH */
-    #gift { position:absolute; bottom:80px; left:50%; transform:translateX(-50%) scale(0); width:220px; cursor:pointer; z-index:99; transition:transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    #finalImage img { width:100vw; height:100vh; object-fit:contain; } /* FULL MÀN HÌNH */
+    #gift { position:absolute; bottom:80px; left:50%; transform:translateX(-50%) scale(0); width:220px; cursor:pointer; z-index:99; transition:transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity:0; }
     #merry { position:fixed; inset:0; color:#ff3366; font-size:90px; font-weight:bold; display:flex; align-items:center; justify-content:center; flex-direction:column; opacity:0; pointer-events:none; z-index:999; text-shadow:0 0 60px #ff0066; transition:opacity 3s; }
     #merry span { font-size:60px; color:#00ffff; margin-top:30px; text-shadow:0 0 40px cyan; }
   </style>
@@ -58,7 +58,7 @@
     );
     globe.add(glass);
 
-    // Đế + ribbon + nhãn
+    // Đế gỗ + ribbon + nhãn Christmas
     const base = new THREE.Mesh(new THREE.CylinderGeometry(84,94,64,64), new THREE.MeshStandardMaterial({color:0x8b4513}));
     base.position.y = -150; globe.add(base);
 
@@ -82,23 +82,23 @@
 
     // Nhà gỗ
     const house = new THREE.Group();
-    const houseBody = new THREE.Mesh(new THREE.BoxGeometry(54,50,54), new THREE.MeshStandardMaterial({color:0x8b4513}));
+    house.add(new THREE.Mesh(new THREE.BoxGeometry(54,50,54), new THREE.MeshStandardMaterial({color:0x8b4513})));
     const roof = new THREE.Mesh(new THREE.ConeGeometry(66,44,4), new THREE.MeshStandardMaterial({color:0xb22222}));
     roof.position.y = 47; roof.rotation.y = Math.PI/4;
-    house.add(houseBody); house.add(roof);
+    house.add(roof);
     house.position.set(-20,-55,-15);
     inside.add(house);
 
     // Người tuyết
     const snowman = new THREE.Group();
-    const body = new THREE.Mesh(new THREE.SphereGeometry(18), new THREE.MeshStandardMaterial({color:0xffffff})); snowman.add(body);
+    snowman.add(new THREE.Mesh(new THREE.SphereGeometry(18), new THREE.MeshStandardMaterial({color:0xffffff})));
     const mid = new THREE.Mesh(new THREE.SphereGeometry(14), new THREE.MeshStandardMaterial({color:0xffffff})); mid.position.y=25; snowman.add(mid);
     const head = new THREE.Mesh(new THREE.SphereGeometry(10), new THREE.MeshStandardMaterial({color:0xffffff})); head.position.y=43; snowman.add(head);
     const hat = new THREE.Mesh(new THREE.CylinderGeometry(9,11,22), new THREE.MeshStandardMaterial({color:0x000})); hat.position.y=52; snowman.add(hat);
     const scarf = new THREE.Mesh(new THREE.BoxGeometry(26,6,14), new THREE.MeshStandardMaterial({color:0xff0000})); scarf.position.set(0,34,11); snowman.add(scarf);
     snowman.position.set(40,-62,10); inside.add(snowman);
 
-    // 4 cây thông – ĐÃ SỬA TRIỆT ĐỂ
+    // 4 cây thông – ĐÃ ĐẢM BẢO KHÔNG LỖI
     for(let i=0; i<4; i++){
       const tree = new THREE.Group();
       const trunk = new THREE.Mesh(new THREE.CylinderGeometry(5,7,24), new THREE.MeshStandardMaterial({color:0x654321}));
@@ -150,7 +150,7 @@
         clickCount++;
         countDisplay.textContent = clickCount;
         if(clickCount===3){
-          const id = setInterval(()=>{ spinSpeed += 0.22; if(spinSpeed>4.5){ clearInterval(id); explodeGlobe(); }},150);
+          setTimeout(explodeGlobe, 600); // chờ chút cho đẹp
         }
       }
     }
@@ -189,6 +189,7 @@
       // HIỆN HỘP QUÀ SAU 4 GIÂY – ĐÃ SỬA ĐÚNG 100%
       setTimeout(()=>{
         const gift = document.getElementById('gift');
+        gift.style.opacity = 1;
         gift.style.transform = 'translateX(-50%) scale(1)';
       },4000);
     }
@@ -199,7 +200,7 @@
     giftBox.addEventListener('touchstart', e=>{e.preventDefault(); handleGiftClick();});
 
     function handleGiftClick(){
-      if(giftClicks < 3){
+      if(giftClicks < 3 && isExploded){
         giftClicks++;
         giftBox.style.transform = 'translateX(-50%) scale(1.3)';
         setTimeout(()=>giftBox.style.transform='translateX(-50%) scale(1)',200);
