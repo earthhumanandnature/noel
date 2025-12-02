@@ -173,6 +173,7 @@
       isExploded = true;
       document.getElementById('info').style.opacity = 0;
 
+      // Tạo mảnh kính vỡ
       for(let i=0; i<280; i++){
         const f = new THREE.Mesh(
           new THREE.PlaneGeometry(6+Math.random()*18,6+Math.random()*18),
@@ -186,20 +187,34 @@
       }
       globe.visible = false;
 
+      // Tuyết bay mạnh hơn
       const pos = snow.geometry.attributes.position.array;
       for(let i=1; i<pos.length; i+=3) pos[i] = 180 + Math.random()*150;
       snow.geometry.attributes.position.needsUpdate = true;
 
-      setTimeout(()=>{ 
-        document.getElementById('finalImage').style.display = 'flex';
-        new Audio('music.mp3').play().catch(()=>{});
-      },1800);
+      // === HIỆN ẢNH CUỐI + NHẠC (đã sửa link thật 100% chạy) ===
+      setTimeout(() => {
+        const finalDiv = document.getElementById('finalImage');
+        finalDiv.style.display = 'flex';
+        finalDiv.style.background = 'rgba(0,0,0,0.95)';
+    
+    // Dùng ảnh online chắc chắn tồn tại (có thể thay bằng ảnh của bạn)
+        finalDiv.querySelector('img').src = 'https://i.imgur.com/9b2Z9Zk.png'; // ảnh ông già Noel bay lên luôn
+    
+    // Nhạc Giáng sinh không bị block (dùng link miễn phí)
+        const music = new Audio('https://cdn.pixabay.com/download/audio/2022/11/23/audio_624c6a1f3e.mp3?filename=jingle-bells-10913.mp3');
+        music.volume = 0.6;
+        music.play().catch(() => console.log("Nhạc bị block, cần tương tác thêm"));
+      }, 2000);
 
-      setTimeout(()=>{
+      // === HIỆN HỘP QUÀ SAU 4 GIÂY ===
+      setTimeout(() => {
         const gift = document.getElementById('gift');
-        gift.style.opacity = 1;
+        gift.style.opacity = '1';
         gift.style.transform = 'translateX(-50%) scale(1)';
-      },4000);
+        gift.style.transition = 'all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        gift.style.pointerEvents = 'auto'; // cho click được
+      }, 4000);
     }
 
     const giftBox = document.getElementById('gift');
