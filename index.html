@@ -96,26 +96,22 @@
     const scarf = new THREE.Mesh(new THREE.BoxGeometry(26,6,14), new THREE.MeshStandardMaterial({color:0xff0000})); scarf.position.set(0,34,11); snowman.add(scarf);
     snowman.position.set(40,-62,10); inside.add(snowman);
 
-    // 4 cây thông – ĐÃ SỬA HOÀN TOÀN LỖI .setScalar
+    // 4 cây thông – ĐÃ SỬA HOÀN TOÀN
     for(let i=0; i<4; i++){
       const tree = new THREE.Group();
-
       const trunk = new THREE.Mesh(new THREE.CylinderGeometry(5,7,24), new THREE.MeshStandardMaterial({color:0x654321}));
       const leaves = new THREE.Mesh(new THREE.ConeGeometry(30,60,12), new THREE.MeshStandardMaterial({color:0x0f5132}));
       leaves.position.y = 42;
-
       tree.add(trunk);
       tree.add(leaves);
-
       tree.position.set(-70 + i*50, -64, -40 - Math.random()*30);
-      const scale = 0.6 + Math.random()*0.5;
-      tree.scale.set(scale, scale, scale);  // ← DÙNG .set() THAY .setScalar()
+      const s = 0.6 + Math.random()*0.5;
+      tree.scale.set(s, s, s);
       tree.rotation.y = Math.random() * Math.PI;
-
       inside.add(tree);
     }
 
-    // Tuyết rơi
+    // Tuyết rơi – ĐÃ SỬA LỖI "postura"
     const snowCount = 7000;
     const posArray = new Float32Array(snowCount * 3);
     for(let i = 0; i < snowCount * 3; i += 3){
@@ -123,8 +119,10 @@
       posArray[i+1] = 200 + Math.random()*100;
       posArray[i+2] = THREE.MathUtils.randFloatSpread(250);
     }
-    const snow = new THREE.Point postura(
-      new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(posArray, 3)),
+    const snowGeometry = new THREE.BufferGeometry();
+    snowGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const snow = new THREE.Points(
+      snowGeometry,
       new THREE.PointsMaterial({color:0xffffff, size:5.5, transparent:true, opacity:0.92, blending:THREE.AdditiveBlending})
     );
     globe.add(snow);
