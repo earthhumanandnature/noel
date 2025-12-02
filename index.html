@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Quả Cầu Tuyết Giáng Sinh 2025 – HOÀN HẢO 100%</title>
+  <title>Quả Cầu Tuyết Giáng Sinh 2025</title>
   <link rel="icon" href="data:,">
   <style>
     body { margin:0; overflow:hidden; background:#000; touch-action:none; }
@@ -59,7 +59,7 @@
     );
     globe.add(glass);
 
-    // Đế + ribbon + nhãn + cảnh trong quả cầu (giữ nguyên như cũ)
+    // Đế + ribbon + nhãn + cảnh bên trong (giữ nguyên như cũ)
     const base = new THREE.Mesh(new THREE.CylinderGeometry(84,94,64,64), new THREE.MeshStandardMaterial({color:0x8b4513}));
     base.position.y = -150; globe.add(base);
     const ribbon = new THREE.Mesh(new THREE.RingGeometry(82,94,64), new THREE.MeshStandardMaterial({color:0xc41e3a, side:THREE.DoubleSide}));
@@ -124,31 +124,31 @@
     dirLight.position.set(120, 250, 100);
     scene.add(dirLight);
 
-    // ==================== HỘP QUÀ 3D SIÊU TO KHỔNG LỒ ====================
+    // ==================== HỘP QUÀ 3D – TO X1.5, ĐẸP HOÀN HẢO ====================
     const giftGroup = new THREE.Group();
-    giftGroup.position.set(0, -120, 0);
-    giftGroup.scale.set(0.01, 0.01, 0.01); // sẽ phóng to sau
+    giftGroup.position.set(0, -100, 0);
+    giftGroup.scale.set(0.01, 0.01, 0.01);
     scene.add(giftGroup);
 
     const giftBody = new THREE.Mesh(
-      new THREE.BoxGeometry(240, 240, 240),
+      new THREE.BoxGeometry(120, 120, 120),
       new THREE.MeshPhysicalMaterial({color:0xff1122, metalness:0.4, roughness:0.2, clearcoat:1})
     );
-    const ribbonV = new THREE.Mesh(new THREE.BoxGeometry(36, 270, 270), new THREE.MeshPhysicalMaterial({color:0xffee00}));
-    const ribbonH = new THREE.Mesh(new THREE.BoxGeometry(270, 270, 36), new THREE.MeshPhysicalMaterial({color:0xffee00}));
-    const bow = new THREE.Mesh(new THREE.TorusGeometry(60, 18, 16, 100), new THREE.MeshPhysicalMaterial({color:0xffee00}));
+    const ribbonV = new THREE.Mesh(new THREE.BoxGeometry(18, 135, 135), new THREE.MeshPhysicalMaterial({color:0xffee00}));
+    const ribbonH = new THREE.Mesh(new THREE.BoxGeometry(135, 135, 18), new THREE.MeshPhysicalMaterial({color:0xffee00}));
+    const bow = new THREE.Mesh(new THREE.TorusGeometry(32, 10, 16, 100), new THREE.MeshPhysicalMaterial({color:0xffee00}));
     bow.rotation.x = Math.PI/2;
 
     giftGroup.add(giftBody, ribbonV, ribbonH, bow);
 
     const giftLid = new THREE.Mesh(
-      new THREE.BoxGeometry(244, 60, 244),
+      new THREE.BoxGeometry(124, 30, 124),
       new THREE.MeshPhysicalMaterial({color:0xee0000, metalness:0.5, roughness:0.2})
     );
-    giftLid.position.y = 150;
+    giftLid.position.y = 75;
     giftGroup.add(giftLid);
 
-    const giftLight = new THREE.PointLight(0xffaa00, 0, 600);
+    const giftLight = new THREE.PointLight(0xffaa00, 0, 400);
     giftLight.position.set(0, 0, 0);
     giftGroup.add(giftLight);
 
@@ -176,15 +176,15 @@
 
         if(clickCount === 3){
           // XOAY ĐIÊN CUỒNG TRƯỚC KHI NỔ
-          let crazySpin = 0;
-          const spinInterval = setInterval(() => {
-            crazySpin += 0.4;
-            spinSpeed = crazySpin;
-            if(crazySpin > 18){
-              clearInterval(spinInterval);
-              setTimeout(explodeGlobe, 600);
+          let crazy = 0;
+          const spinInt = setInterval(() => {
+            crazy += 0.45;
+            spinSpeed = crazy;
+            if(crazy > 20){
+              clearInterval(spinInt);
+              setTimeout(explodeGlobe, 700);
             }
-          }, 80);
+          }, 70);
         }
       }
     }
@@ -195,19 +195,18 @@
       isExploded = true;
       document.getElementById('info').style.opacity = 0;
 
-      // Kính vỡ đẹp hơn
-      for(let i=0; i<350; i++){
-        const f = new THREE.Mesh(new THREE.PlaneGeometry(10+Math.random()*25,10+Math.random()*25),
+      for(let i=0; i<320; i++){
+        const f = new THREE.Mesh(new THREE.PlaneGeometry(10+Math.random()*22,10+Math.random()*22),
           new THREE.MeshPhysicalMaterial({color:0xffffff,metalness:0.95,roughness:0.05,transmission:0.98,thickness:10,transparent:true,opacity:0.9})
         );
         f.position.copy(glass.position);
-        const dir = new THREE.Vector3(Math.random()-0.5,Math.random()-0.2,Math.random()-0.5).normalize().multiplyScalar(18+Math.random()*35);
+        const dir = new THREE.Vector3(Math.random()-0.5,Math.random()-0.2,Math.random()-0.5).normalize().multiplyScalar(15+Math.random()*30);
         f.userData = {vel:dir, rot:new THREE.Vector3(Math.random()*60,Math.random()*60,Math.random()*60)};
         scene.add(f); fragments.push(f);
       }
       globe.visible = false;
 
-      // Hiện ảnh full màn hình 3.5s
+      // Hiện ảnh full 3.5s
       setTimeout(() => {
         const img = document.getElementById('finalImage');
         img.style.display = 'flex';
@@ -215,18 +214,17 @@
         new Audio('music.mp3').play().catch(()=>{});
       }, 1800);
 
-      // Ẩn ảnh → hiện hộp quà KHỔNG LỒ
+      // Ẩn ảnh → hiện hộp quà x1.5
       setTimeout(() => {
         document.getElementById('finalImage').style.opacity = 0;
         setTimeout(() => {
           document.getElementById('finalImage').style.display = 'none';
-          // Phóng to hộp quà x3 lần
-          giftGroup.scale.set(3, 3, 3);
+          giftGroup.scale.set(1.5, 1.5, 1.5); // ← TO X1.5 ĐẸP NHẤT
         }, 2000);
       }, 1800 + 3500);
     }
 
-    // Bấm vào hộp quà 3D khổng lồ
+    // Bấm hộp quà
     renderer.domElement.addEventListener('click', (e) => {
       if(giftClicks >= 3 || giftGroup.scale.x < 1) return;
       mouse.x = (e.clientX / innerWidth) * 2 - 1;
@@ -234,28 +232,30 @@
       raycaster.setFromCamera(mouse, camera);
       if(raycaster.intersectObject(giftBody).length > 0 || raycaster.intersectObject(giftLid).length > 0){
         giftClicks++;
-        giftGroup.rotation.y += 0.4;
-        giftLight.intensity = giftClicks * 8;
-        // Rung mạnh
-        giftGroup.position.y += 40;
-        setTimeout(() => giftGroup.position.y -= 40, 300);
+        giftGroup.rotation.y += 0.35;
+        giftLight.intensity = giftClicks * 6;
+        giftGroup.position.y += 30;
+        setTimeout(() => giftGroup.position.y -= 30, 400);
         if(giftClicks === 3) setTimeout(openGift, 1200);
       }
     });
 
+    // MỞ QUÀ – NẮP BAY CHẬM, ĐẸP, NHÌN RÕ
     function openGift(){
       new Audio('music2.mp3').play().catch(()=>{});
-      // Nắp bay lên + xoay
-      giftLid.position.y += 600;
-      giftLid.rotation.x += Math.PI * 6;
-      giftLight.intensity = 50;
+      giftLight.intensity = 40;
+
+      // Nắp bay chậm + xoay đẹp
+      giftLid.position.y += 180;
+      giftLid.rotation.x = Math.PI * 3;
+      giftLid.rotation.z = Math.PI * 2;
+
       setTimeout(() => {
         giftGroup.visible = false;
         document.getElementById('merry').classList.add('active');
-      }, 2000);
+      }, 2800);
     }
 
-    // Animation loop
     function animate(){
       requestAnimationFrame(animate);
       globe.rotation.y += 0.004 + spinSpeed;
@@ -267,7 +267,6 @@
         shake *= 0.92;
       }
 
-      // Tuyết rơi
       const pos = snow.geometry.attributes.position.array;
       for(let i=1; i<pos.length; i+=3){
         pos[i] -= 1 + spinSpeed*8 + shake*6;
@@ -275,7 +274,6 @@
       }
       snow.geometry.attributes.position.needsUpdate = true;
 
-      // Mảnh kính vỡ
       fragments.forEach(f => {
         f.position.add(f.userData.vel);
         f.rotation.x += f.userData.rot.x * 0.04;
